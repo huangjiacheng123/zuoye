@@ -1,0 +1,303 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>animate</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="animate.js"></script>
+</head>
+<body>
+	<div id="barrage">
+		<img id="horn" src="images/a15.png" alt="小喇叭鸭">
+		<div id="barrage1">
+			<div id="barrage2">[温馨提示]最近有不少不法分子在网上骗人，请大家注意!!!</div>
+		</div>
+	</div>
+ 	<div class="box" id="box">
+		<div class="slider" id="slider">
+			<div class="slide"><img src="images/b5.png"></div>
+			<div class="slide"><img src="images/b1.png"></div>
+			<div class="slide"><img src="images/b2.png"></div>
+			<div class="slide"><img src="images/b3.png"></div>
+			<div class="slide"><img src="images/b4.png"></div>
+			<div class="slide"><img src="images/b5.png"></div>
+			<div class="slide"><img src="images/b1.png"></div>
+		</div>
+		<span id="left"><</span>
+		<span id="right">></span>
+		<ul class="nav" id="nav">
+			<li class="active">1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+		</ul>
+	</div>
+	<script>
+		var box = document.getElementById("box");
+		var oNavlist = document.getElementById("nav").children;
+		var slider = document.getElementById("slider");
+		var left = document.getElementById("left");
+		var right = document.getElementById("right");
+		var barrage2 = document.getElementById("barrage2");
+		var index = 1;
+		var timer;
+		var isMoving = false;
+		function next(){
+			if(isMoving){
+				return;
+			}
+			isMoving = true;
+			index++;
+			navChange();
+			animate(slider,{left:-1200*index},function(){
+				if(index == 6){
+					slider.style.left = "-1200px";
+					index = 1;
+				}
+				isMoving = false;
+			});	
+		}
+		function prev(){
+			if(isMoving){
+				return;
+			}
+			isMoving = true;
+			index--;
+			navChange();
+			animate(slider,{left:-1200*index},function(){
+				if (index == 0) {
+					slider.style.left = -6000 + "px";
+					index = 5;
+				}
+				isMoving = false;
+			});
+		}
+		var timer = setInterval(next,3000);
+		setInterval(function(){
+			var now = parseInt(getStyle(barrage2,"left"));
+			var speed = 1;
+			if(now == -300){
+				barrage2.style.left = 1000 + "px";
+			}else{
+				barrage2.style.left = now - speed + "px";
+			}
+		},30);
+		box.onmouseover = function(){
+			animate(left,{opacity:50});
+			animate(right,{opacity:50});
+			clearInterval(timer);
+		}
+		box.onmouseout = function(){
+			animate(left,{opacity:0});
+			animate(right,{opacity:0});
+			timer = setInterval(next,3000);
+		}
+		right.onclick = next;
+		left.onclick = prev;
+		for(var i = 0;i<oNavlist.length;i++){
+			oNavlist[i].idx = i;
+			oNavlist[i].onclick = function(){
+				index = this.idx+1;
+				navChange();
+				animate(slider),{left:-1200*index};
+			}
+		}
+		function navChange(){
+			oNavlist[0].className = "first";
+			for(var i = 1; i<oNavlist.length; i++){			
+				oNavlist[i].className = "";
+			}
+			if (index == 6){
+				oNavlist[0].className = "active";
+			}else if(index == 0){
+				oNavlist[4].className = "active";
+			}else{
+				oNavlist[index-1].className = "active";
+			}
+		}
+	</script>
+</body>
+</html>
+<!-- // var box = document.getElementById("box");
+		// box.onclick = function(){
+		// 	animate(box,{left:500,top:300,opacity:20});
+			//变速运动
+			// setInterval(function(){
+			// 	var now = parseInt(getStyle(box,'left'));
+			// 	var speed = Math.ceil((300 - now)/6);
+			// 	if(now == 300){
+			// 		clearInterval(timer);
+			// 	}else{
+			// 		box.style.left = now + speed + "px";
+			// 	}
+			// },30);
+			// setInterval(function(){
+			// 	var now = parseInt(getStyle(box,'left'));
+			// 	if(now == 500){
+			// 		clearInterval(timer);
+			// 	}else{
+			// 		box.style.left = now + 1+ "px";
+			// 	}
+			// },30);
+			//匀速运动
+			// setInterval(function(){
+			// 	var now = parseInt(getStyle(box,'left'));
+			// 	// console.log(now);
+			// 	box.style.left = now + 1 + "px";
+			// },30)
+			// animate(box,{left:1000,top:500,opacity:30},function(){
+			// 	console.log(1)
+			// });
+		// } -->
+<!-- var img1 = document.getElementById('img1');
+	// var slider = document.getElementById('slider');
+	// var Simg = document.getElementById('Simg');
+	// var img2 = document.getElementById('img2');
+	// var Bimg = document.getElementById('Bimg');
+	// var box = document.getElementById('box');
+	// // var 
+	// console.log(box.left);
+	// img1.onmouseover = function(){
+	// 	slider.style.display="block";
+		
+	// }
+	// img1.onmousemove = function(e){
+	// 	var mouseX = e.clientX;
+	// 	var mouseY = e.clientY;
+	// 	var boxLeft = box.offsetLeft;//获取当前元素在浏览器中的位置
+	// 	var boxTop = box.offsetTop;
+	// 	var sliderWidth = slider.offsetWidth;
+	// 	var sliderHeight = slider.offsetHeight;
+	// 	var sliderLeft = mouseX-boxLeft-sliderWidth/2;
+	// 	var sliderTop = mouseY-boxTop-sliderHeight/2;
+	// 	if(sliderLeft <=0 ){
+	// 		sliderLeft=0;
+	// 	}
+	// 	else if(sliderLeft>=(img1.offsetWidth-slider.offsetWidth)){
+	// 		sliderLeft = img1.offsetWidth-slider.offsetWidth;
+	// 	}
+	// 	else if(sliderTop<=0){
+	// 		sliderTop=0;
+	// 	}
+	// 	else if(sliderTop>=(img1.offsetHeight-slider.offsetHeight)){
+	// 		sliderTop = img1.offsetHeight-slider.offsetHeight;
+	// 	}
+	// 	slider.style.marginLeft = sliderLeft+"px";
+	// 	slider.style.marginTop = sliderTop+"px";
+
+	// 	// slider.style.marginLeft= (mouseX-boxLeft)/2+"px";
+	// 	// slider.style.marginTop = (mouseY-boxTop)/2+"px"; -->
+<!-- var notice =document.getElementsByClassName("notice");
+        var inp = document.getElementsByClassName("inp");
+        var inp_code = document.getElementsByClassName("inp code");
+        var getCode = document.getElementsByClassName("getCode");
+        var codeImg = document.getElementsByClassName("codeImg");
+        var btn = document.getElementsByClassName("btn");
+        inp[0].onfocus=function() {
+        	notice[0].innerHTML = "请输入4-10位用户名";
+        }
+        inp[0].onblur=function() {
+        	notice[0].innerHTML = "";
+        }
+        inp[1].onfocus=function() {
+        	notice[1].innerHTML = "请输入6-12位密码";
+        }
+		inp[1].onblur=function() {
+        	notice[1].innerHTML = "";
+        }
+        var imgList = ["image/zAZfB.jpg","image/ZEhUN.jpg","image/zFC9H.jpg","image/zhWY9.jpg","image/Zin4c.jpg","image/ZITGj.jpg","image/zJ6iV.jpg","image/zjsKP.jpg","image/ZKc9S.jpg","image/zKDXU.jpg"];
+        var image = new Image();
+        btn[0].onclick=function(){
+        	image.src=imgList[Math.ceil(Math.random())*10]; 
+        	codeImg[0].appendChild(image);
+        }
+        btn.onclick=function(){
+        	if(inp[0].value.length<4||linpList[0].va1ue.length>10){
+        		notice[0].innerHTML = "用户名位数不对";
+        	}
+        	if(inp[1].value.length<6||linpList[1].va1ue.length>12){
+        		notice[1].innerHTML = "密码位数不对";
+        	}
+        	if(inp_code[0].value!=image.src.slice(6,10)){
+        		notice[2].innerHTML = "验证码错误";
+        	}
+        	while(inp[0].value.length>=4&&linpList[0].va1ue.length<=10&&inp[1].value.length>=6&&linpList[1].va1ue.length<=12&&inp_code[0].value==image.src.slice(6,10)){
+        		alert("登陆成功");
+        	}
+
+        } -->
+<!-- // var appendChild=document.getElementById("appendChild");
+		// var insertbefore=document.getElementById("insertbefore");
+		// var list=document.getElementById("list");
+		// appendChild.onclick = function(){
+		// 	var liNode = document.createElement("li");
+		// 	var liCount = list.children.length+1;
+		// 	liNode.innerHTML = "列表"+liCount;
+		// 	list.appendChild(liNode);
+		// }
+
+		// insertbefore.onclick=function(){
+		// 	var liNode = document.createElement("li");
+		// 	liNode.innerHTML = "列表"
+		// 	list.insertBefore(liNode,list.firstElementChild); 
+		// 	}
+		// var removeChild = document.getElementById("removeChild");
+		// removeChild.onclick = function(){
+		// 	var list0 = document.getElementById("list0");
+		// 	// var list2 = document.getElementById("list");
+		// 	// list.removeChild(list0);
+		// 	list0.parentNode.removeChild(list0);
+		// }
+
+	// //通过container，children
+	// //获取container内容段落和div标记内部的内容
+	// //存储到数组arr中，在控制台进行输出
+	// var arr = [];
+ //    var container = document.getElementById("countainer");
+ //    var childList = container.children;
+ //    for(var i =0;i<childList.length;++i){
+ //    	// console.log(childList[i].nodeName);
+ //    	if(childList[i].nodeName=="P"||childList[i].nodeName=="DIV"){
+ //    		arr.push(childList[i].innerHTML);
+ //    	}
+ //    }
+ //    console.log(arr);
+ 	// //元素节点、属性节点、文本节点，都可以当做一个对象看待
+ 	// var list = document.getElementById("list");
+ 	// var linkHerf = list.getAttributeNode("href");
+ 	// console.log(linkHerf);
+ 	// var textNode = list.firstChild;
+ 	// //nodeType属性是一个只读属性
+ 	// console.log(list.nodeType,linkHerf.nodeType,textNode.nodeType);
+ 	// console.log(list.nodeName,linkHerf.nodeName,textNode.nodeName);
+ 	// console.log(list.nodeValue,linkHerf.nodeValue,textNode.nodeValue);
+	// var imgList=document.getElementsByTagName("img");
+		// // imgList[0].onclick=function() {
+		// // 	this.getAttribute("src");
+		// // 	console.log(this.getAttribute("src")); 
+		// // 	this.setAttribute("src","超级截屏_20180915_171315.png");
+		// // }
+		// // var btn1=document.getElementById("btn1");
+		// // btn1.onclick=function(){
+		// // 	this.parentNode.firstElementChild.setAttribute("class","imgborder");
+		// // }
+		// // var btn2=document.getElementById("btn2");
+		// // btn2.onclick=function(){
+		// // 	var isExist=this.parentNode.firstElementChild.hasAttribute("class");
+		// // 	console.log(isExist); 
+		// // 	if(isExist){
+		// // 		this.parentNode.firstElementChild.removeAttribute("class"); 
+		// // 	}
+		// // 	else{
+		// // 		return ;
+		// // 	}
+		// // }
+		// // var btn3=document.getElementById("btn3");
+		// // btn3.onclick=function(){
+		// // 	this.parentNode.firstElementChild.setAttribute("id","imgmargin");
+		// // }
+		// // var btn4=document.getElementById("btn4");
+		// // btn4.onclick=function(){
+		// // 	this.parentNode.firstElementChild.removeAttribute("id"); 
+		// // } -->
